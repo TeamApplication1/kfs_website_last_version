@@ -1,0 +1,202 @@
+/* === Technical Support Page === */
+
+.support-header {
+    position: relative;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f161c 0%, #1a2744 40%, #2c3e50 100%);
+}
+.support-header-bg {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 600px 400px at 20% 30%, rgba(30,144,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 500px 300px at 80% 60%, rgba(225,177,44,0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+.support-header-icon {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(30,144,255,0.2), rgba(225,177,44,0.1));
+    border: 3px solid rgba(225,177,44,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2.4rem;
+    color: #e1b12c;
+}
+.support-header h1 {
+    color: #fff;
+    font-size: 2.6rem;
+    font-weight: 900;
+}
+.support-header p {
+    color: rgba(255,255,255,0.65);
+    font-size: 1.05rem;
+    margin-top: 8px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Split layout wrapper */
+.support-wrapper {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+}
+
+/* Left: Form */
+.support-form-container {
+    padding: 45px 40px;
+}
+.support-form-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1e272e;
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid #f0f0f0;
+}
+.support-form-header i {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #0f161c, #2c3e50);
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #e1b12c;
+    font-size: 1.1rem;
+}
+
+.support-form-container .form-label {
+    font-weight: 700;
+    color: #2d3436;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+.support-form-container .form-control {
+    border-radius: 12px;
+    border: 2px solid #e8eaef;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    background: #fafbfc;
+}
+.support-form-container .form-control:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 4px rgba(44,62,80,0.1);
+    background: #fff;
+}
+
+/* Right: Info panel */
+.support-info-container {
+    padding: 45px 35px;
+    background: linear-gradient(135deg, #0f161c, #1a2744);
+    color: #fff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.support-brand {
+    text-align: center;
+    margin-bottom: 35px;
+}
+.support-brand i {
+    font-size: 3rem;
+    color: #e1b12c;
+    margin-bottom: 12px;
+}
+.support-brand h4 {
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+.support-brand p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+
+.support-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.support-channel {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.3s ease;
+}
+.support-channel:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-5px);
+}
+.support-channel i {
+    font-size: 1.5rem;
+    color: #e1b12c;
+    width: 45px; height: 45px;
+    background: rgba(225,177,44,0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.support-channel strong {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+}
+.support-channel span {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.85rem;
+}
+
+.support-submit-btn {
+    background: linear-gradient(135deg, #0f161c, #2c3e50);
+    color: #e1b12c;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 1rem;
+    transition: all 0.4s ease;
+    width: 100%;
+}
+.support-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    color: #e1b12c;
+}
+
+@media (max-width: 991px) {
+    .support-info-container {
+        padding: 35px 30px;
+    }
+    .support-form-container {
+        padding: 30px 25px;
+    }
+}
+
+@media (max-width: 767px) {
+    .support-header { height: 250px; }
+    .support-header h1 { font-size: 1.8rem; }
+    .support-header-icon { width: 65px; height: 65px; font-size: 1.6rem; }
+    .support-wrapper { border-radius: 12px; }
+    .support-channel:hover { transform: none; }
+}

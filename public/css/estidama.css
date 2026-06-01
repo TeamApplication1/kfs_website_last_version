@@ -1,0 +1,373 @@
+/* ==============================================
+   Estidama Page — Expert Redesign
+   Navy (#1e272e) + Gold (#e1b12c)
+   ============================================== */
+
+.estidama-page {
+    font-family: 'Cairo', sans-serif;
+    overflow-x: hidden;
+}
+
+/* --- 1. Hero — بدون صورة --- */
+.est-hero {
+    position: relative;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+.est-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, #1e272e 0%, #2c3e50 40%, #1e272e 100%);
+}
+.est-hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 600px 300px at 30% 40%, rgba(225,177,44,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 200px at 70% 60%, rgba(225,177,44,0.04) 0%, transparent 70%);
+}
+.est-hero-bg::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, rgba(225,177,44,0.5), #e1b12c, rgba(225,177,44,0.5), transparent);
+}
+.est-hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    animation: estFadeUp 0.8s ease forwards;
+}
+.est-hero-logo {
+    height: 90px;
+    margin-bottom: 1.2rem;
+    filter: drop-shadow(0 4px 15px rgba(0,0,0,0.3));
+}
+.est-hero-title {
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+}
+
+@keyframes estFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Shared --- */
+.est-section { padding: 5rem 0; }
+
+.est-badge {
+    display: inline-block;
+    background: rgba(225,177,44,0.12);
+    color: #e1b12c;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+.est-section-title {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: #1e272e;
+    margin-bottom: 10px;
+}
+.est-section-sub {
+    color: #6c7a89;
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto;
+}
+.est-section-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #e1b12c;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    position: relative;
+    padding-right: 44px;
+}
+.est-section-label::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 3px;
+    background: #e1b12c;
+    border-radius: 2px;
+}
+
+/* --- 2. About --- */
+.est-about {
+    padding: 3rem 0 4rem;
+}
+.est-about-image {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(30,39,46,0.12);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+.est-about-image:hover {
+    transform: scale(1.01);
+    box-shadow: 0 35px 80px rgba(30,39,46,0.2);
+}
+.est-about-image img {
+    width: 100%;
+    display: block;
+}
+.est-about-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #1e272e;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+.est-about-features ul {
+    list-style: none;
+    padding: 0;
+}
+.est-about-features ul li {
+    position: relative;
+    padding-right: 32px;
+    margin-bottom: 14px;
+    line-height: 1.8;
+    color: #4b6584;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.est-about-features ul li::before {
+    content: "\f058";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 0;
+    top: 4px;
+    color: #e1b12c;
+    font-size: 1.15rem;
+}
+
+/* --- 3. Gallery --- */
+.est-gallery {
+    padding: 0 0 4rem;
+}
+.est-gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+.est-gallery-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(30,39,46,0.08);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.est-gallery-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(30,39,46,0.15);
+}
+.est-gallery-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s ease;
+}
+.est-gallery-card:hover img {
+    transform: scale(1.03);
+}
+.est-gallery-tag {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    background: rgba(30,39,46,0.75);
+    backdrop-filter: blur(6px);
+    color: #e1b12c;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 50px;
+    border: 1px solid rgba(225,177,44,0.25);
+}
+
+/* --- 4. Program Cards --- */
+.est-program-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(30,39,46,0.06);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.est-program-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(30,39,46,0.12);
+}
+.est-program-img {
+    height: 200px;
+    overflow: hidden;
+}
+.est-program-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+.est-program-card:hover .est-program-img img {
+    transform: scale(1.08);
+}
+.est-program-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.est-program-center {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #e1b12c;
+    margin-bottom: 6px;
+    display: block;
+}
+.est-program-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1e272e;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+.est-program-desc {
+    color: #6c7a89;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    flex-grow: 1;
+    margin-bottom: 16px;
+}
+
+/* --- Buttons --- */
+.est-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.88rem;
+    padding: 12px 28px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+.est-btn-gold {
+    background: #e1b12c;
+    color: #1e272e;
+    border-color: #e1b12c;
+}
+.est-btn-gold:hover {
+    background: transparent;
+    color: #e1b12c;
+    border-color: #e1b12c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(225,177,44,0.25);
+}
+.est-btn-outline {
+    background: transparent;
+    color: #1e272e;
+    border-color: #1e272e;
+}
+.est-btn-outline:hover {
+    background: #1e272e;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* --- 6. Stats --- */
+.est-stats {
+    padding: 5rem 0;
+    background: #1e272e;
+    border-radius: 24px;
+    margin: 3rem 0;
+}
+.est-stat-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+}
+.est-stat-num {
+    font-size: 3.8rem;
+    font-weight: 900;
+    color: #e1b12c;
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+.est-stat-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    margin: 0;
+}
+
+/* --- 7. Events --- */
+.est-events-slider {
+    padding-bottom: 3rem;
+}
+.est-event-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 300px;
+    box-shadow: 0 8px 30px rgba(30,39,46,0.08);
+    transition: transform 0.4s ease;
+}
+.est-event-card:hover {
+    transform: translateY(-6px);
+}
+.est-event-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.est-event-caption {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: linear-gradient(0deg, rgba(30,39,46,0.85) 0%, transparent 100%);
+    color: #fff;
+    padding: 1.5rem 1.2rem 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: right;
+}
+
+/* --- Mobile --- */
+@media (max-width: 991px) {
+    .est-hero { height: 320px; }
+    .est-hero-title { font-size: 2rem; }
+    .est-hero-logo { height: 70px; }
+    .est-section-title { font-size: 1.8rem; }
+    .est-gallery-grid { grid-template-columns: 1fr; gap: 16px; }
+}
+@media (max-width: 576px) {
+    .est-hero { height: 260px; }
+    .est-hero-title { font-size: 1.5rem; }
+    .est-hero-logo { height: 55px; }
+    .est-stat-num { font-size: 2.6rem; }
+}
