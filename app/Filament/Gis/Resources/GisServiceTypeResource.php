@@ -22,6 +22,13 @@ class GisServiceTypeResource extends Resource
     protected static ?string $pluralModelLabel = 'فئات الخدمات الجيومكانية';
     protected static ?int $navigationSort = 3;
     protected static ?string $navigationGroup = 'الخدمات المكانية والمساحية';
+
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasAnyRole(['super_admin', 'Admin', 'مدير المركز', 'رؤوساء الاقسام']);
+    }
+
     /**
      * باني نموذج الإدخال (Form)
      */

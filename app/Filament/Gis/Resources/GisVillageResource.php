@@ -23,6 +23,34 @@ class GisVillageResource extends Resource
     protected static ?string $pluralModelLabel = 'قاعدة بيانات القرى والعزب';
     protected static ?int $navigationSort = 3;
     // protected static ?string $navigationGroup = 'الخدمات المكانية والمساحية';
+
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasAnyRole(['super_admin', 'Admin', 'مدير المركز', 'رؤوساء الاقسام']);
+    }
+
+    public static function canViewAny(): bool
+    {
+        return static::canAccess();
+    }
+    public static function canCreate(): bool
+    {
+        return static::canAccess();
+    }
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return static::canAccess();
+    }
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return static::canAccess();
+    }
+    public static function canView(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return static::canAccess();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -33,11 +61,11 @@ class GisVillageResource extends Resource
                         // 1. اختيار المركز (لا يحفظ في جدول القرى ولكن يستخدم للفلترة)
                         Forms\Components\Select::make('gis_markaz_id')
                             ->label('المركز الرئيسي')
-                            ->options(GisMarkaz::pluck('name', 'id'))
+                            ->options(GisMarkaz::cachedIdOptions())
                             ->searchable()
-                            ->live() // يجعل الحقل تفاعلياً لتحديث القائمة التالية
+                            ->live()
                             ->required()
-                            ->dehydrated(false) // لا ترسل القيمة للداتابيز لأنها مخزنة في جدول الشياخة
+                            ->dehydrated(false)
                             ->afterStateUpdated(fn(callable $set) => $set('gis_shiakha_id', null)),
 
                         // 2. اختيار الوحدة المحلية (مرتبط بالمركز المختار)

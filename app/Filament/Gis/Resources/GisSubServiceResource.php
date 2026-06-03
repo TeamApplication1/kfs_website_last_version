@@ -23,6 +23,13 @@ class GisSubServiceResource extends Resource
     protected static ?string $pluralModelLabel = 'خدمات النظم الجيومكانية';
     protected static ?int $navigationSort = 4;
     protected static ?string $navigationGroup = 'الخدمات المكانية والمساحية';
+
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasAnyRole(['super_admin', 'Admin', 'مدير المركز', 'مدير الادارة الهندسية', 'رؤوساء الاقسام']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form

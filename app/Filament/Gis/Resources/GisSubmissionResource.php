@@ -24,6 +24,12 @@ class GisSubmissionResource extends Resource
     protected static ?int $navigationSort = 10;
     protected static ?string $navigationGroup = 'الخدمات المكانية والمساحية';
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasAnyRole(['super_admin', 'Admin', 'مدير المركز', 'رؤوساء الاقسام', 'مدير الادارة الهندسية']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -154,7 +160,7 @@ class GisSubmissionResource extends Resource
                         fn(Builder $query, array $data) =>
                         $query->when($data['value'], fn($q) => $q->where('address_info->markaz_id', $data['value']))
                     )
-                    ->options(GisMarkaz::pluck('name', 'id')),
+                    ->options(GisMarkaz::cachedIdOptions()),
 
                 // 2. فلتر حالة الدفع
                 Tables\Filters\SelectFilter::make('payment_status')

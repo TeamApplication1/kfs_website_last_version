@@ -22,18 +22,25 @@ class ListRemovalOrders extends ListRecords
 
     public function getTabs(): array
     {
+        $counts = cache()->remember('removal_order_tab_counts', 60, fn() =>
+            RemovalOrder::selectRaw("COALESCE(SUM(status = 'قيد الإعداد'), 0) as new_count")
+                ->selectRaw("COALESCE(SUM(status = 'قيد المراجعة'), 0) as pending_count")
+                ->selectRaw("COALESCE(SUM(status = 'تم التنفيذ'), 0) as completed_count")
+                ->first()
+        );
+
         return [
             'all' => Tab::make('كافة القرارات'),
             'new' => Tab::make('الوارد الجديد')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'قيد الإعداد'))
-                ->badge(RemovalOrder::where('status', 'قيد الإعداد')->count()),
+                ->badge($counts->new_count),
             'pending' => Tab::make('قيد المراجعة')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'قيد المراجعة'))
-                ->badge(RemovalOrder::where('status', 'قيد المراجعة')->count())
+                ->badge($counts->pending_count)
                 ->badgeColor('info'),
             'completed' => Tab::make('تم التنفيذ')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'تم التنفيذ'))
-                ->badge(RemovalOrder::where('status', 'تم التنفيذ')->count())
+                ->badge($counts->completed_count)
                 ->badgeColor('success'),
         ];
     }

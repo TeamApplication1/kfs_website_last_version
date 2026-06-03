@@ -22,10 +22,24 @@ class PendingRemovalsResource extends Resource
     protected static ?string $pluralModelLabel = 'قرارات قيد المراجعة الفنية';
     protected static ?int $navigationSort = 3;
 
-    // فلترة البيانات لتظهر "قيد المراجعة" فقط في هذه الصفحة
+    public static function shouldRegisterNavigation(): bool { return false; }
+
+    public static function canAccess(): bool
+    {
+        $u = auth()->user();
+        return $u && $u->hasAnyRole([
+            'super_admin', 'Admin',
+            'مدير المركز', 'رؤوساء الاقسام',
+        ]);
+    }
+
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('status', 'قيد المراجعة');
+        return parent::getEloquentQuery()
+            ->where(function(Builder $q) {
+                $q->where('status', 'قيد المراجعة')
+                  ->orWhere('stage', RemovalOrder::STAGE_ENGINEERING_REVIEW);
+            });
     }
 
     public static function form(Form $form): Form
@@ -44,7 +58,7 @@ class PendingRemovalsResource extends Resource
                 Tables\Columns\TextColumn::make('updated_at')->label('آخر تحديث')->since()->sortable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('center')->label('المركز')->options(GisMarkaz::pluck('name', 'name')),
+                Tables\Filters\SelectFilter::make('center')->label('المركز')->options(GisMarkaz::cachedOptions()),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->label('تفاصيل الفحص'),

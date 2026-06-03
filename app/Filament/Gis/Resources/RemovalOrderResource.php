@@ -23,6 +23,17 @@ class RemovalOrderResource extends Resource
     protected static ?string $pluralModelLabel = 'قرارات الإزالة';
     protected static ?int $navigationSort = 1;
 
+    public static function canAccess(): bool
+    {
+        $u = auth()->user();
+        return $u && $u->hasAnyRole([
+            'super_admin', 'Admin',
+            'مدير المركز', 'مدير الادارة الهندسية',
+            'مهندس التنظيم', 'مدير التنظيم',
+            'رؤوساء الاقسام',
+        ]);
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -43,7 +54,7 @@ class RemovalOrderResource extends Resource
                 Forms\Components\Section::make('الموقع والمالك')
                     ->schema([
                         Forms\Components\Grid::make(3)->schema([
-                            Forms\Components\Select::make('center')->label('المركز')->options(GisMarkaz::pluck('name', 'name'))->required(),
+                            Forms\Components\Select::make('center')->label('المركز')->options(GisMarkaz::cachedOptions())->required(),
                             Forms\Components\TextInput::make('local_unit')->label('الوحدة المحلية')->required(),
                             Forms\Components\TextInput::make('street')->label('الشارع')->required(),
                         ]),
@@ -135,6 +146,13 @@ class RemovalOrderResource extends Resource
                 ]),
             ]);
     }
+
+    // ── Authorization: bypass Shield so that canAccess() is the gate ──
+    public static function canViewAny(): bool { return static::canAccess(); }
+    public static function canCreate(): bool { return static::canAccess(); }
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool { return static::canAccess(); }
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool { return static::canAccess(); }
+    public static function canView(\Illuminate\Database\Eloquent\Model $record): bool { return static::canAccess(); }
 
     public static function getRelations(): array
     {

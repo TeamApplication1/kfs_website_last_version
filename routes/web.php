@@ -170,6 +170,17 @@ Route::get('/gis/removal-print/{record}', function (App\Models\RemovalOrder $rec
     return view('gis.print-removal-decision', compact('record'));
 })->name('gis.removal.print')->middleware(['auth']);
 
+Route::get('/gis/invoice/{record}', function (App\Models\GisSubmission $record) {
+    $submission = $record->load(['user', 'subService']);
+    return view('filament.gis.pages.invoice-print', compact('submission'));
+})->name('gis.invoice.print')->middleware(['auth']);
+
+Route::get('/gis/invoice/print-bulk/{ids}', function (string $ids) {
+    $idArray = explode(',', $ids);
+    $submissions = App\Models\GisSubmission::whereIn('id', $idArray)->with(['user', 'subService'])->get();
+    return view('filament.gis.pages.invoice-print-bulk', compact('submissions'));
+})->name('gis.invoice.print-bulk')->middleware(['auth']);
+
 // Route::post('/efinance/callback', function (Request $request) {
 //     $status = $request->input('ResponseCode');
 //     $reqNum = $request->input('SenderRequestNumber');

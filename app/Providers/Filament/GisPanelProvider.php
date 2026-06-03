@@ -53,6 +53,9 @@ class GisPanelProvider extends PanelProvider
             // 2. إعدادات الخطوط واللغة
             ->font('Cairo')
             ->discoverResources(in: app_path('Filament/Gis/Resources'), for: 'App\\Filament\\Gis\\Resources')
+            ->resources([
+                \App\Filament\Gis\Resources\RoleResource::class,
+            ])
             ->discoverPages(in: app_path('Filament/Gis/Pages'), for: 'App\\Filament\\Gis\\Pages')
             ->pages([
                 Pages\Dashboard::class,
@@ -95,7 +98,39 @@ class GisPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
             ])
 
-            // 6. حقن كود الجافا سكريبت الخاص بالـ GPS (هام جداً لقرارات الإزالة الميدانية)
+            // 6. إضافة معلومات المستخدم في أعلى الشريط الجانبي
+            ->renderHook(
+                'panels::sidebar.nav.start',
+                fn(): string => \Illuminate\Support\Facades\Blade::render('
+                    @php $user = auth()->user(); @endphp
+                    <div class="fi-sidebar-user-info border-b border-gray-200 dark:border-gray-700 px-4 py-4">
+                        {{-- expanded state --}}
+                        <div x-show="$store.sidebar.isOpen"
+                             x-transition:enter="lg:transition lg:delay-100"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100">
+                            <div class="flex items-center gap-3">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-600 dark:bg-primary-500 flex items-center justify-center text-white font-bold text-lg shadow-sm">
+                                    {{ mb_substr($user->name, 0, 1) }}
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate leading-tight">{{ $user->name }}</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate leading-tight mt-0.5">{{ $user->email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- collapsed state --}}
+                        <div x-show="!$store.sidebar.isOpen"
+                             class="flex justify-center">
+                            <div class="w-9 h-9 rounded-full bg-primary-600 dark:bg-primary-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                                {{ mb_substr($user->name, 0, 1) }}
+                            </div>
+                        </div>
+                    </div>
+                ')
+            )
+
+            // 7. حقن كود الجافا سكريبت الخاص بالـ GPS (هام جداً لقرارات الإزالة الميدانية)
             ->renderHook(
                 'panels::body.end',
                 fn(): string => '

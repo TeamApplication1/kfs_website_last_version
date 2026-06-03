@@ -1,0 +1,37 @@
+الاسم	البريد	الرول
+مدير المركز	director_of_the_center@kfs.gov.eg	مدير المركز
+مدير الادارة الهندسية	director_of_engineering_administration@kfs.gov.eg	مدير الادارة الهندسية
+مهندس التنظيم	planning_engineer@kfs.gov.eg	مهندس التنظيم
+مدير الوحدة الفرعية	director_of_the_sub-unit@kfs.gov.eg	مدير الوحدة الفرعية
+العضو الميداني	field_member@kfs.gov.eg	العضو الميداني
+مدخل البيانات بالوحدة الفرعية	data_entry_clerk_sub-unit@kfs.gov.eg	مدخل البيانات بالوحدة الفرعية
+محللي النظم	systems_analysts@kfs.gov.eg	محللي النظم
+رؤوساء الاقسام	heads_of_departments@kfs.gov.eg	رؤوساء الاقسام
+
+
+مديرين المركز (يشوفوا كل الصفحات)
+الاسم	البريد	الصلاحية
+مدير المركز - كفر الشيخ	manager_kfs@kfs.gov.eg	مدير المركز
+مدير المركز - دسوق	manager_dsq@kfs.gov.eg	مدير المركز
+مدير المركز - بيلا	manager_bla@kfs.gov.eg	مدير المركز
+الأدوار الفنية
+الاسم	البريد	الصلاحية
+مدير الهندسة	eng_dir@kfs.gov.eg	مدير الادارة الهندسية
+مهندس تنظيم - كفر الشيخ	engineer_kfs@kfs.gov.eg	مهندس التنظيم
+مهندس تنظيم - دسوق	engineer_dsq@kfs.gov.eg	مهندس التنظيم
+فني تنظيم - كفر الشيخ	tech_kfs@kfs.gov.eg	فني التنظيم
+فني تنظيم - دسوق	tech_dsq@kfs.gov.eg	فني التنظيم
+أدوار المتغيرات والنظم
+الاسم	البريد	الصلاحية
+مدير متغيرات	spatial_mgr@kfs.gov.eg	مدير المتغيرات
+عضو متغيرات 1	spatial_member1@kfs.gov.eg	عضو المتغيرات
+عضو متغيرات 2	spatial_member2@kfs.gov.eg	عضو المتغيرات
+أخصائي نظم	sys_specialist@kfs.gov.eg	أخصائي النظم
+مكتب المحافظ	gov_office@kfs.gov.eg	مكتب المحافظ
+باقي الأدوار
+الاسم	البريد	الصلاحية
+عضو ميداني (جديد)	field_member2@kfs.gov.eg	العضو الميداني
+محلل نظم	analyst@kfs.gov.eg	محللي النظم
+مدخل بيانات	data_entry@kfs.gov.eg	مدخل البيانات بالوحدة الفرعية
+دعم اداري	admin_support@kfs.gov.eg	الدعم الاداري
+رؤساء اقسام	heads_dept@kfs.gov.eg	رؤوساء الاقسام

@@ -16,10 +16,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 
@@ -40,9 +37,11 @@ class AddRemovalOrder extends Page implements HasForms
     {
         return auth()->user()->hasAnyRole([
             'super_admin', 
+            "مدير المركز",
             "مهندس التنظيم",
             "مدير التنظيم",
-            'فني التنظيم'
+            'فني التنظيم',
+            'العضو الميداني'
         ]);
     }
 
@@ -51,7 +50,9 @@ class AddRemovalOrder extends Page implements HasForms
     {
         return auth()->user()->hasAnyRole([
             'super_admin', 
-            'فني التنظيم'
+            'مدير المركز',
+            'فني التنظيم',
+            'العضو الميداني'
         ]);
     }
     // مصفوفة البيانات التي سيتم ربطها بالفورم
@@ -86,38 +87,59 @@ class AddRemovalOrder extends Page implements HasForms
                                 ])->columns(2),
                         ]),
 
-                    // المرحلة 2: بيانات الموقع والمالك
-                    Wizard\Step::make('الموقع والمالك')
+                    // المرحلة 2: بيانات الموقع والمخالف
+                    Wizard\Step::make('الموقع والمخالف')
                         ->schema([
-                            Grid::make(3)->schema([
-                                Select::make('center')->label('المركز')->options(GisMarkaz::pluck('name', 'name'))->required()->live(),
-                                Select::make('local_unit')->label('الوحدة المحلية')->options(fn(Get $get) => GisShiakha::whereHas('markaz', fn($q) => $q->where('name', $get('center')))->pluck('name', 'name'))->required(),
-                                TextInput::make('street')->label('الشارع')->required(),
+                            Section::make('الموقع')->schema([
+                                Grid::make(3)->schema([
+                                    Select::make('center')->label('المركز')->options(GisMarkaz::cachedOptions())->required()->live(),
+                                    Select::make('local_unit')->label('الوحدة المحلية')->options(fn(Get $get) => GisShiakha::whereHas('markaz', fn($q) => $q->where('name', $get('center')))->pluck('name', 'name'))->nullable(),
+                                ]),
+                                TextInput::make('street')->label('العنوان')->placeholder('أدخل العنوان بالكامل (شارع، حي، رقم العقار)')->required(),
                             ]),
-                            TextInput::make('owner_name')->label('الاسم الكامل للمالك')->required(),
-                            TextInput::make('owner_national_id')->label('الرقم القومي')->length(14)->required(),
+                            Section::make('بيانات المخالف')->schema([
+                                Grid::make(2)->schema([
+                                    TextInput::make('owner_name')->label('اسم المخالف')->required(),
+                                    TextInput::make('owner_national_id')->label('الرقم القومي')->numeric()->rule('digits:14')->required(),
+                                ]),
+                            ]),
+                            Section::make('المهندس والمقاول')->schema([
+                                Grid::make(2)->schema([
+                                    TextInput::make('engineer_name')->label('اسم المهندس المسؤول')->required(),
+                                    TextInput::make('engineer_national_id')->label('الرقم القومي للمهندس')->numeric()->rule('digits:14'),
+                                ]),
+                                Grid::make(2)->schema([
+                                    TextInput::make('contractor_name')->label('اسم المقاول')->required(),
+                                    TextInput::make('contractor_national_id')->label('الرقم القومي للمقاول')->numeric()->rule('digits:14'),
+                                ]),
+                            ]),
                         ]),
 
-                    // المرحلة 3: فنيات المخالفة (والـ GPS)
+                    // المرحلة 3: المعاينة والقرارات
                     Wizard\Step::make('المعاينة والقرارات')
                         ->schema([
-                            RichEditor::make('violation_works')->label('وصف الأعمال المخالفة')->required(),
-                            Grid::make(2)->schema([
-                                TextInput::make('latitude')->label('خط العرض')->readonly()->id('lat_input'),
-                                TextInput::make('longitude')->label('خط الطول')->readonly()->id('lng_input'),
+                            Section::make('وصف المخالفة')->schema([
+                                RichEditor::make('violation_works')->label('وصف الأعمال المخالفة')->required(),
                             ]),
-                            Actions::make([
-                                Action::make('get_gps')
-                                    ->label('التقاط إحداثيات الموقع الحالي')
-                                    ->icon('heroicon-m-map-pin')
-                                    ->color('danger')
-                                    ->extraAttributes(['onclick' => "getUserLocation()"]),
+                            Section::make('المرفقات')->schema([
+                                FileUpload::make('photo_file')->label('صورة المخالفة')->image()->required()
+                                    ->extraAttributes(['x-init' => '$watch(\'state\', () => getUserLocation())']),
+                                FileUpload::make('stop_order_file')->label('محضر الإيقاف (PDF)')->acceptedFileTypes(['application/pdf'])->nullable(),
                             ]),
-                            FileUpload::make('photo_file')->label('صورة المخالفة')->image()->required(),
-
-                            Grid::make(2)->schema([
-                                TextInput::make('stop_order_number')->label('رقم قرار الإيقاف')->required(),
-                                DatePicker::make('stop_order_date')->label('تاريخ القرار')->required(),
+                            Section::make('الموقع الجغرافي')->schema([
+                                Grid::make(2)->schema([
+                                    TextInput::make('latitude')->label('خط العرض')->readonly()->id('lat_input'),
+                                    TextInput::make('longitude')->label('خط الطول')->readonly()->id('lng_input'),
+                                ]),
+                            ]),
+                            Section::make('بيانات القرار')->schema([
+                                Grid::make(2)->schema([
+                                    TextInput::make('stop_order_number')->label('رقم قرار الإيقاف')->required(),
+                                    DatePicker::make('stop_order_date')->label('تاريخ قرار الإيقاف')->required(),
+                                ]),
+                                Grid::make(2)->schema([
+                                    DatePicker::make('announcement_date')->label('تاريخ إعلان المواطن')->required(),
+                                ]),
                             ]),
                         ]),
                 ])
@@ -131,9 +153,25 @@ class AddRemovalOrder extends Page implements HasForms
      */
     public function create()
     {
-        $formData = $this->form->getState();
+        $formData = $this->form->getState()['data'];
+        $formData['created_by'] = auth()->id();
+        $formData['stage'] = RemovalOrder::STAGE_CREATED;
+        $formData['local_unit'] ??= 'غير محدد';
+        $formData['violation_area'] ??= 'غير محدد';
+        $formData['district'] ??= 'غير محدد';
+        $formData['violation_plot'] ??= 'غير محدد';
+        $formData['violation_dimensions'] ??= 'غير محدد';
+        $formData['violation_cost'] ??= 0;
+        $formData['owner_center'] ??= $formData['center'] ?? 'غير محدد';
+        $formData['owner_unit'] ??= $formData['local_unit'] ?? 'غير محدد';
+        $formData['owner_street'] ??= $formData['street'] ?? 'غير محدد';
+        $formData['owner_district'] ??= 'غير محدد';
+        $formData['owner_governorate'] ??= 'كفر الشيخ';
+        $formData['engineer_national_id'] ??= 'غير محدد';
+        $formData['contractor_national_id'] ??= 'غير محدد';
+        $formData['violation_report_number'] ??= 'غير محدد';
+        $formData['report_date'] ??= now()->toDateString();
 
-        // إنشاء السجل في جدول RemovalOrder
         RemovalOrder::create($formData);
 
         Notification::make()
@@ -141,6 +179,6 @@ class AddRemovalOrder extends Page implements HasForms
             ->success()
             ->send();
 
-        return redirect()->to('/gis/removal-orders'); // العودة للسجل العام
+        return redirect()->to('/gis/my-removal-orders');
     }
 }

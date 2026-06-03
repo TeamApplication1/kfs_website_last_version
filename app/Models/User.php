@@ -63,18 +63,39 @@ class User extends Authenticatable implements FilamentUser
 
         // 2. تحديد الصلاحيات بناءً على معرف اللوحة (Panel ID)
         return match ($panel->getId()) {
-            'admin' => $this->hasAnyRole(['super_admin','Admin', 'مسئول اعلام', 'مسئول استثمار ', 'مسئول سياحة', 'مسئول المركز التكنولوجي', 'مسئول التخطيط الاستراتيجي'
+            'admin' => $this->hasAnyRole([
+                'super_admin',
+                'Admin',
+                'مسئول اعلام',
+                'مسئول استثمار ',
+                'مسئول سياحة',
+                'مسئول المركز التكنولوجي',
+                'مسئول التخطيط الاستراتيجي'
             ]),
-            'gis'   => $this->hasAnyRole(['super_admin','Admin','مدير المركز', 'مدير الادارة الهندسية', 'مهندس التنظيم', 'مدير التنظيم'
-             , 'فني التنظيم' , 'مدير الوحدة الفرعية'
-             , 'العضو الميداني' , 'مدخل البيانات بالوحدة الفرعية'
-             , 'محللي النظم' , 'الدعم الاداري'
-             , 'رؤوساء الاقسام'
+            'gis'   => $this->hasAnyRole([
+                'super_admin',
+                'Admin',
+                'مدير المركز',
+                'مدير الادارة الهندسية',
+                'مهندس التنظيم',
+                'مدير التنظيم',
+                'فني التنظيم',
+                'مدير الوحدة الفرعية',
+                'العضو الميداني',
+                'مدخل البيانات بالوحدة الفرعية',
+                'محللي النظم',
+                'الدعم الاداري',
+                'رؤوساء الاقسام',
+                'مدير المتغيرات',
+                'عضو المتغيرات',
+                'أخصائي النظم',
+                'مكتب المحافظ'
             ]),
-            'estidama_panal' => $this->hasAnyRole(['super_admin','Admin', 'estidama_trainer', 'estidama_admin']),
+            'estidama_panal' => $this->hasAnyRole(['super_admin', 'Admin', 'estidama_trainer', 'estidama_admin']),
             default => false,
         };
     }
+
     public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class);

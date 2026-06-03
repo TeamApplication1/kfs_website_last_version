@@ -21,6 +21,12 @@ class PendingGisSubmissionsResource extends Resource
     protected static ?string $pluralModelLabel = 'طلبات قيد المراجعة الفنية';
     protected static ?int $navigationSort = 7;
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasAnyRole(['super_admin', 'Admin', 'مدير المركز', 'رؤوساء الاقسام', 'مدير الادارة الهندسية', 'مهندس التنظيم', 'مدير التنظيم', 'محللي النظم']);
+    }
+
     // تصفية البيانات لتظهر "قيد المراجعة" فقط
     public static function getEloquentQuery(): Builder
     {

@@ -13,7 +13,10 @@ class GisWelcomeWidget extends Widget
     {
         $user = auth()->user();
         if (!$user) return false;
-        $dashboardRoles = ['super_admin', 'مدير المركز', 'مدير الادارة الهندسية'];
+        $dashboardRoles = [
+            'super_admin', 'مدير المركز', 'مدير الادارة الهندسية',
+            'رؤوساء الاقسام', 'مدير المتغيرات',
+        ];
         return !$user->hasAnyRole($dashboardRoles);
     }
 
@@ -30,8 +33,19 @@ class GisWelcomeWidget extends Widget
                 'icon' => 'heroicon-o-wrench-screwdriver',
                 'quickLinks' => [
                     ['label' => 'إضافة قرار إزالة', 'url' => '/gis/add-removal-order', 'icon' => 'heroicon-o-plus-circle'],
+                    ['label' => 'قرارات الإزالة الخاصة بي', 'url' => '/gis/my-removal-orders', 'icon' => 'heroicon-o-document-text'],
                     ['label' => 'قرارات الإزالة', 'url' => '/gis/removal-orders', 'icon' => 'heroicon-o-document-text'],
                     ['label' => 'الوارد الجديد', 'url' => '/gis/incoming-removals', 'icon' => 'heroicon-o-inbox-arrow-down'],
+                ],
+            ],
+            'العضو الميداني' => [
+                'title' => 'أهلاً بك أيها العضو الميداني 🏗️',
+                'message' => 'من هنا يمكنك إضافة قرارات إزالة جديدة ومتابعة قراراتك ورفع المحاضر.',
+                'color' => 'success',
+                'icon' => 'heroicon-o-eye',
+                'quickLinks' => [
+                    ['label' => 'إضافة قرار إزالة جديد', 'url' => '/gis/add-removal-order', 'icon' => 'heroicon-o-plus-circle'],
+                    ['label' => 'قرارات الإزالة', 'url' => '/gis/my-removal-orders', 'icon' => 'heroicon-o-document-text'],
                 ],
             ],
             'مهندس التنظيم' => [
@@ -40,6 +54,7 @@ class GisWelcomeWidget extends Widget
                 'color' => 'info',
                 'icon' => 'heroicon-o-pencil-square',
                 'quickLinks' => [
+                    ['label' => 'سير العمل', 'url' => '/gis/workflow-dashboard', 'icon' => 'heroicon-o-arrow-path'],
                     ['label' => 'الوارد اليومي', 'url' => '/gis/new-gis-submissions', 'icon' => 'heroicon-o-document-plus'],
                     ['label' => 'قيد المراجعة', 'url' => '/gis/pending-gis-submissions', 'icon' => 'heroicon-o-arrow-path'],
                     ['label' => 'جملة الطلبات', 'url' => '/gis/gis-submissions', 'icon' => 'heroicon-o-document-magnifying-glass'],
@@ -56,6 +71,43 @@ class GisWelcomeWidget extends Widget
                     ['label' => 'سجل التقارير', 'url' => '/gis/removal-reports', 'icon' => 'heroicon-o-clipboard-document-list'],
                     ['label' => 'إحصائيات وتحليلات', 'url' => '/gis/removal-analytics', 'icon' => 'heroicon-o-presentation-chart-line'],
                     ['label' => 'تقارير عامة', 'url' => '/gis/gis-general-reports', 'icon' => 'heroicon-o-presentation-chart-bar'],
+                ],
+            ],
+            'مدير المتغيرات' => [
+                'title' => 'أهلاً بك يا مدير المتغيرات 🗺️',
+                'message' => 'إدارة البعد المكاني لقرارات الإزالة وتعيين أعضاء المتغيرات.',
+                'color' => 'info',
+                'icon' => 'heroicon-o-map',
+                'quickLinks' => [
+                    ['label' => 'سير العمل', 'url' => '/gis/workflow-dashboard', 'icon' => 'heroicon-o-arrow-path'],
+                    ['label' => 'قرارات الإزالة', 'url' => '/gis/removal-orders', 'icon' => 'heroicon-o-document-text'],
+                ],
+            ],
+            'عضو المتغيرات' => [
+                'title' => 'أهلاً بك يا عضو المتغيرات 📍',
+                'message' => 'إضافة البعد المكاني للقرارات المحالة إليك.',
+                'color' => 'success',
+                'icon' => 'heroicon-o-map-pin',
+                'quickLinks' => [
+                    ['label' => 'سير العمل', 'url' => '/gis/workflow-dashboard', 'icon' => 'heroicon-o-arrow-path'],
+                ],
+            ],
+            'أخصائي النظم' => [
+                'title' => 'أهلاً بك يا أخصائي النظم 💻',
+                'message' => 'رفع ملفات PDF للقرارات المكتملة مكانياً.',
+                'color' => 'primary',
+                'icon' => 'heroicon-o-document-arrow-up',
+                'quickLinks' => [
+                    ['label' => 'سير العمل', 'url' => '/gis/workflow-dashboard', 'icon' => 'heroicon-o-arrow-path'],
+                ],
+            ],
+            'مكتب المحافظ' => [
+                'title' => 'أهلاً بك — مكتب المحافظ 📜',
+                'message' => 'رفع التأشيرة الختامية على القرارات النهائية.',
+                'color' => 'warning',
+                'icon' => 'heroicon-o-check-badge',
+                'quickLinks' => [
+                    ['label' => 'سير العمل', 'url' => '/gis/workflow-dashboard', 'icon' => 'heroicon-o-arrow-path'],
                 ],
             ],
             'default' => [

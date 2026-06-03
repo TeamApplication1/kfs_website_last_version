@@ -23,6 +23,19 @@ class GisMarkazResource extends Resource
     protected static ?string $pluralModelLabel = 'المراكز والمناطق';
     protected static ?int $navigationSort = 1;
     // protected static ?string $navigationGroup = 'الخدمات المكانية والمساحية';
+
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasAnyRole(['super_admin', 'Admin', 'مدير المركز', 'مدير الادارة الهندسية', 'رؤوساء الاقسام']);
+    }
+
+    public static function canViewAny(): bool { return static::canAccess(); }
+    public static function canCreate(): bool { return static::canAccess(); }
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool { return static::canAccess(); }
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool { return static::canAccess(); }
+    public static function canView(\Illuminate\Database\Eloquent\Model $record): bool { return static::canAccess(); }
+
     /**
      * نموذج الإضافة والتعديل
      */

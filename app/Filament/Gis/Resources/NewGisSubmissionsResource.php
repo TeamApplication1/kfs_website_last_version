@@ -26,6 +26,12 @@ class NewGisSubmissionsResource extends Resource
     protected static ?string $pluralModelLabel = 'طلبات الخدمات الجديدة';
     protected static ?int $navigationSort = 6;
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return $user && $user->hasAnyRole(['super_admin', 'Admin', 'مدير المركز', 'رؤوساء الاقسام', 'مدير الادارة الهندسية', 'مهندس التنظيم', 'مدير التنظيم', 'محللي النظم', 'مدخل البيانات بالوحدة الفرعية']);
+    }
+
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -73,7 +79,7 @@ class NewGisSubmissionsResource extends Resource
                                 Forms\Components\Grid::make(3)->schema([
                                     Forms\Components\Select::make('address_info.markaz_id')
                                         ->label('المركز')
-                                        ->options(GisMarkaz::pluck('name', 'id'))
+                                        ->options(GisMarkaz::cachedIdOptions())
                                         ->live()
                                         ->afterStateUpdated(fn(Set $set) => $set('address_info.shiakha_id', null)),
 

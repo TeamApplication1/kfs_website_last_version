@@ -22,9 +22,25 @@ class IncomingRemovalsResource extends Resource
     protected static ?string $pluralModelLabel = 'القرارات الواردة الجديدة';
     protected static ?int $navigationSort = 2;
 
+    public static function shouldRegisterNavigation(): bool { return false; }
+
+    public static function canAccess(): bool
+    {
+        $u = auth()->user();
+        return $u && $u->hasAnyRole([
+            'super_admin', 'Admin',
+            'مدير المركز', 'مدير الادارة الهندسية',
+            'رؤوساء الاقسام', 'مهندس التنظيم', 'مدير التنظيم',
+        ]);
+    }
+
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('status', 'قيد الإعداد');
+        return parent::getEloquentQuery()
+            ->where(function(Builder $q) {
+                $q->where('status', 'قيد الإعداد')
+                  ->orWhere('stage', RemovalOrder::STAGE_CREATED);
+            });
     }
 
     public static function form(Form $form): Form
@@ -71,7 +87,7 @@ class IncomingRemovalsResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('center')
                     ->label('تصفية بالمركز')
-                    ->options(GisMarkaz::pluck('name', 'name')),
+                    ->options(GisMarkaz::cachedOptions()),
             ])
             ->actions([
                 // زر استعراض مشروع القرار (الطباعة)

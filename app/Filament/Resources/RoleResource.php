@@ -25,7 +25,12 @@ class RoleResource extends Resource implements HasShieldPermissions
     public static function getPermissionPrefixes(): array
     {
         return [
-            'view', 'view_any', 'create', 'update', 'delete', 'delete_any',
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
         ];
     }
 
@@ -79,24 +84,24 @@ class RoleResource extends Resource implements HasShieldPermissions
     {
         return Forms\Components\Tabs\Tab::make('resources')
             ->label(__('filament-shield::filament-shield.resources'))
-            ->schema(fn (callable $get) => static::getResourcesSchema($get('panel_filter')))
-            ->visible(fn (): bool => Utils::isResourceEntityEnabled());
+            ->schema(fn(callable $get) => static::getResourcesSchema($get('panel_filter')))
+            ->visible(fn(): bool => Utils::isResourceEntityEnabled());
     }
 
     protected static function getPagesTab(): Forms\Components\Component
     {
         return Forms\Components\Tabs\Tab::make('pages')
             ->label(__('filament-shield::filament-shield.pages'))
-            ->schema(fn (callable $get) => static::getPagesSchema($get('panel_filter')))
-            ->visible(fn (): bool => Utils::isPageEntityEnabled());
+            ->schema(fn(callable $get) => static::getPagesSchema($get('panel_filter')))
+            ->visible(fn(): bool => Utils::isPageEntityEnabled());
     }
 
     protected static function getWidgetsTab(): Forms\Components\Component
     {
         return Forms\Components\Tabs\Tab::make('widgets')
             ->label(__('filament-shield::filament-shield.widgets'))
-            ->schema(fn (callable $get) => static::getWidgetsSchema($get('panel_filter')))
-            ->visible(fn (): bool => Utils::isWidgetEntityEnabled());
+            ->schema(fn(callable $get) => static::getWidgetsSchema($get('panel_filter')))
+            ->visible(fn(): bool => Utils::isWidgetEntityEnabled());
     }
 
     protected static function getResourcesSchema(?string $panelId): array
@@ -270,6 +275,7 @@ class RoleResource extends Resource implements HasShieldPermissions
 
     protected static function getResourceLabel(array $entity): string
     {
+        // dd($entity);
         $shield = static::shield();
         if ($shield->hasLocalizedPermissionLabels()) {
             return FilamentShield::getLocalizedResourceLabel($entity['fqcn']);
@@ -306,13 +312,13 @@ class RoleResource extends Resource implements HasShieldPermissions
             ->afterStateHydrated(function (Forms\Components\Component $component, string $operation, $record) use ($options) {
                 if (in_array($operation, ['edit', 'view']) && $record) {
                     $state = collect($options)
-                        ->filter(fn ($val, $key) => $record->checkPermissionTo($key))
+                        ->filter(fn($val, $key) => $record->checkPermissionTo($key))
                         ->keys()
                         ->toArray();
                     $component->state($state);
                 }
             })
-            ->dehydrated(fn ($state) => !blank($state));
+            ->dehydrated(fn($state) => !blank($state));
     }
 
     public static function table(Table $table): Table
@@ -322,7 +328,7 @@ class RoleResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('name')
                     ->weight('font-medium')
                     ->label(__('filament-shield::filament-shield.column.name'))
-                    ->formatStateUsing(fn ($state): string => Str::headline($state))
+                    ->formatStateUsing(fn($state): string => Str::headline($state))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('guard_name')
                     ->badge()
