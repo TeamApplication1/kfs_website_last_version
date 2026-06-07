@@ -13,6 +13,9 @@ class ServiceSubmission extends Model
     protected $casts = [
         'submitted_data' => 'array',
         'paid_at'      => 'datetime',
+        'fulfillment_data_fields' => 'array',
+        'fulfillment_requested_at' => 'datetime',
+        'fulfillment_completed_at' => 'datetime',
     ];
 
     public function transaction()

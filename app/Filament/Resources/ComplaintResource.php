@@ -11,6 +11,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -128,14 +129,40 @@ class ComplaintResource extends Resource
                         'success' => 'resolved',
                     ]),
                 Tables\Columns\TextColumn::make('created_at')->label('تاريخ الاستلام')->since()->sortable(),
+                Tables\Columns\TextColumn::make('response_time')
+                    ->label('زمن الاستجابة')
+                    ->sortable(false)
+                    ->searchable(false)
+                    ->getStateUsing(function ($record) {
+                        if (!$record->admin_reply || !$record->replied_at) return '—';
+                        $diff = $record->created_at->diff($record->replied_at);
+                        $parts = [];
+                        if ($diff->d > 0) $parts[] = $diff->d . ' يوم';
+                        if ($diff->h > 0) $parts[] = $diff->h . ' ساعة';
+                        if ($diff->i > 0) $parts[] = $diff->i . ' دقيقة';
+                        return implode(' ', $parts) ?: 'أقل من دقيقة';
+                    })
+                    ->color(fn($record) => $record->admin_reply && $record->replied_at
+                        ? ($record->created_at->diffInHours($record->replied_at) <= 24 ? 'success' : 'warning')
+                        : 'gray'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options(['pending' => 'قيد الانتظار', 'in_progress' => 'قيد المعالجة', 'resolved' => 'تم الحل']),
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_from')->label('من تاريخ'),
+                        Forms\Components\DatePicker::make('created_until')->label('إلى تاريخ'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()->label('تغيير الحالة'), // Edit will now only show the status field
+                Tables\Actions\EditAction::make()->label('تغيير الحالة'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()]),

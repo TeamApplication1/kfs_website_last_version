@@ -33,10 +33,22 @@
                         </span>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('citizen.submissions.show', $sub->id) }}" class="btn btn-outline-gold btn-sm rounded-pill">
-                            <span>التفاصيل</span>
-                            <i class="fas fa-eye fa-xs ms-2"></i>
-                        </a>
+                        <div class="d-flex gap-1 justify-content-center">
+                            <a href="{{ route('citizen.submissions.show', $sub->id) }}" class="btn btn-outline-gold btn-sm rounded-pill">
+                                <span>التفاصيل</span>
+                                <i class="fas fa-eye fa-xs ms-2"></i>
+                            </a>
+                            @if ($sub->fulfillment_action === 'payment' && $sub->fulfillment_status === 'requested')
+                                <a href="#" class="btn btn-danger btn-sm rounded-pill">
+                                    <i class="fas fa-credit-card"></i> دفع
+                                </a>
+                            @endif
+                            @if ($sub->fulfillment_action === 'data_correction' && $sub->fulfillment_status === 'requested')
+                                <a href="{{ route('citizen.submissions.show', $sub->id) }}" class="btn btn-warning btn-sm rounded-pill">
+                                    <i class="fas fa-edit"></i> تعديل
+                                </a>
+                            @endif
+                        </div>
                     </td>
                 </tr>
             @empty

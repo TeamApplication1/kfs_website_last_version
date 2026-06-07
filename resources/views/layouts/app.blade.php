@@ -40,10 +40,10 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-    <!-- Google Fonts (Tajawal) -->
+    <!-- Google Fonts (Cairo + Tajawal) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap"
         rel="stylesheet" />
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -55,6 +55,75 @@
 </head>
 
 <body>
+    <div id="page-loader">
+        <div class="loader-inner">
+            <img src="{{ Storage::url($settings['site_logo_header'] ?? '') }}" alt="شعار المحافظة" class="loader-logo">
+            <div class="loader-line">
+                <div class="loader-line-fill"></div>
+            </div>
+            <div class="loader-text">
+                <span class="loader-title">كفر الشيخ الرقمية</span>
+                <span class="loader-sub">Kafr El Sheikh Digital</span>
+            </div>
+        </div>
+    </div>
+    <style>
+        #page-loader {
+            position: fixed; inset: 0; z-index: 999999;
+            background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1f3c 100%);
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-inner { text-align: center; }
+        .loader-logo {
+            width: 120px; height: auto; margin-bottom: 25px;
+            animation: loaderPulse 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(218,165,32,0.3));
+        }
+        .loader-line {
+            width: 200px; height: 3px; background: rgba(255,255,255,0.1);
+            border-radius: 10px; margin: 0 auto 20px; overflow: hidden;
+        }
+        .loader-line-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #DAA520, #f0d060, #DAA520);
+            border-radius: 10px;
+            animation: loaderProgress 2s ease-in-out infinite;
+        }
+        .loader-text { text-align: center; }
+        .loader-title {
+            display: block; font-size: 1.5rem; font-weight: 900;
+            color: #DAA520; font-family: 'Tajawal', sans-serif;
+            letter-spacing: 2px;
+            animation: loaderFade 2s ease-in-out infinite;
+        }
+        .loader-sub {
+            display: block; font-size: 0.8rem; color: rgba(255,255,255,0.5);
+            font-family: 'Tajawal', sans-serif; margin-top: 5px;
+            letter-spacing: 3px; text-transform: uppercase;
+        }
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes loaderProgress {
+            0% { width: 0%; margin-left: 0; }
+            50% { width: 100%; margin-left: 0; }
+            100% { width: 0%; margin-left: 100%; }
+        }
+        @keyframes loaderFade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+    </style>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('page-loader').classList.add('hidden');
+            }, 1200);
+        });
+    </script>
     <div id="page-wrapper">
         @include('includes.header')
 
@@ -77,25 +146,34 @@
                 includedLanguages: 'ar,en,fr,de,es,zh-CN,ja,ko',
                 autoDisplay: false
             }, 'google_translate_element');
+            restoreLanguage();
+        }
+
+        function restoreLanguage() {
+            var m = document.cookie.match(/googtrans=\/[^\/]+\/([^;]+)/);
+            if (m && m[1] !== 'ar') {
+                var wait = function(cnt) {
+                    var sel = document.querySelector('.goog-te-combo');
+                    if (sel) { sel.value = m[1]; sel.dispatchEvent(new Event('change')); }
+                    else if (cnt < 10) { setTimeout(function() { wait(cnt + 1); }, 400); }
+                };
+                wait(0);
+            }
         }
 
         function setLanguage(lang) {
-            var select = document.querySelector('.goog-te-combo');
-            if (select) {
-                select.value = lang;
-                select.dispatchEvent(new Event('change'));
-                // Also set cookie as backup
-                document.cookie = "googtrans=/ar/" + lang + "; path=/";
-            } else {
-                // Fallback: set cookie and reload
-                document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-                document.cookie = "googtrans=/ar/" + lang + "; path=/";
-                location.reload();
-            }
+            document.cookie = "googtrans=/ar/" + lang + "; path=/";
+            var trySet = function(cnt) {
+                var sel = document.querySelector('.goog-te-combo');
+                if (sel) { sel.value = lang; sel.dispatchEvent(new Event('change')); }
+                else if (cnt < 10) { setTimeout(function() { trySet(cnt + 1); }, 400); }
+                else { location.reload(); }
+            };
+            trySet(0);
         }
     </script>
 
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
     <script>
         function applyDirectionByLanguage() {
             const match = document.cookie.match(/googtrans=\/[^\/]+\/([^;]+)/);

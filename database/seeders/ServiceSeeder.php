@@ -11,15 +11,15 @@ class ServiceSeeder extends Seeder
     {
         Service::updateOrCreate(
             ['title_line_1' => 'الحماية', 'title_line_2' => 'الاجتماعية'],
-            ['description' => 'خدمات متعلقة بالدعم الاجتماعي كالعلاج على نفقة الدولة والتمويل العقاري وغيرها.', 'is_highlighted' => false]
+            ['description' => 'خدمات متعلقة بالدعم الاجتماعي كالعلاج على نفقة الدولة والتمويل العقاري وغيرها.', 'is_highlighted' => false, 'title' => 'الحماية الاجتماعية']
         );
         Service::updateOrCreate(
             ['title_line_1' => 'الخدمات', 'title_line_2' => 'المدنية'],
-            ['description' => 'خدمات متعلقة بالأحوال الشخصية والأحوال المدنية والتوثيق والمرور.', 'is_highlighted' => true]
+            ['description' => 'خدمات متعلقة بالأحوال الشخصية والأحوال المدنية والتوثيق والمرور.', 'is_highlighted' => true, 'title' => 'الخدمات المدنية']
         );
         Service::updateOrCreate(
             ['title_line_1' => 'خدمات', 'title_line_2' => 'الملكيات'],
-            ['description' => 'خدمات متعلقة بالشهر العقاري والسجل العيني الزراعي والحضري.', 'is_highlighted' => false]
+            ['description' => 'خدمات متعلقة بالشهر العقاري والسجل العيني الزراعي والحضري.', 'is_highlighted' => false, 'title' => 'خدمات الملكيات']
         );
     }
 }

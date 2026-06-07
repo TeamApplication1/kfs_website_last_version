@@ -13,6 +13,7 @@
                         <th>الخدمة</th>
                         <th>الإجراء المطلوب</th>
                         <th>تاريخ التقديم</th>
+                        <th class="text-center">إجراء</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,8 +29,38 @@
                                 <span class="fulfillment-badge-{{ $item->fulfillment_action === 'مراجعة بيانات' ? 'review' : ($item->fulfillment_action === 'دفع رسوم' ? 'pay' : ($item->fulfillment_action === 'مستندات ناقصة' ? 'docs' : 'retry')) }}">
                                     {{ $item->fulfillment_action }}
                                 </span>
+                                @if (!empty($item->fulfillment_reason))
+                                    <br><small class="text-muted">{{ $item->fulfillment_reason }}</small>
+                                @endif
                             </td>
                             <td><span class="text-muted small">{{ $item->created_at->format('Y/m/d') }}</span></td>
+                            <td class="text-center">
+                                @if ($item->fulfillment_action === 'دفع رسوم')
+                                    <a href="{{ $item->type === 'gis' ? route('gis.apply.success', $item->id) : '#' }}"
+                                       class="btn btn-danger btn-sm rounded-pill px-3">
+                                        <i class="fas fa-credit-card"></i> دفع الآن
+                                    </a>
+                                @elseif ($item->fulfillment_action === 'مراجعة بيانات' || $item->fulfillment_action === 'تعديل بيانات')
+                                    @if ($item->type === 'service')
+                                        <a href="{{ route('citizen.submissions.show', $item->id) }}"
+                                           class="btn btn-warning btn-sm rounded-pill px-3">
+                                            <i class="fas fa-edit"></i> تعديل البيانات
+                                        </a>
+                                    @else
+                                        <span class="text-muted small">بانتظار مراجعة الموظف</span>
+                                    @endif
+                                @elseif ($item->fulfillment_action === 'مستندات ناقصة')
+                                    <a href="{{ route('citizen.dashboard.gis') }}"
+                                       class="btn btn-info btn-sm rounded-pill px-3">
+                                        <i class="fas fa-file-upload"></i> رفع المستندات
+                                    </a>
+                                @elseif ($item->fulfillment_action === 'إعادة تقديم')
+                                    <a href="{{ route('services.index') }}"
+                                       class="btn btn-secondary btn-sm rounded-pill px-3">
+                                        <i class="fas fa-redo"></i> إعادة تقديم
+                                    </a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

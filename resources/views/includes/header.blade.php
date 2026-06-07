@@ -30,7 +30,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm main-nav">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ Storage::url($settings['site_logo_header']) }}" alt="شعار المحافظة" class="logo-img" />
+                <img src="{{ Storage::url($settings['site_logo_header'] ?? '') }}" alt="شعار المحافظة" class="logo-img" />
             </a>
 
             <div class="collapse navbar-collapse" id="mainNav">
@@ -94,6 +94,7 @@
                             تواصل معنا
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ route('directory.index') }}"><i class="fas fa-phone-alt ms-2"></i> دليل الهاتف</a></li>
                             <li><a class="dropdown-item" href="{{ route('contact.index') }}">الدعم الفني </a></li>
                             <li><a class="dropdown-item" href="{{ route('requests.index') }}">تقديم شكوي أو بلاغ </a>
                             </li>
@@ -175,7 +176,7 @@
                         <li><a class="dropdown-item" onclick="setLanguage('ja')">日本語 (Japanese)</a></li>
                         <li><a class="dropdown-item" onclick="setLanguage('ko')">한국어 (Korean)</a></li>
                     </ul>
-                    <div id="google_translate_element" style="display:none"></div>
+                    <div id="google_translate_element"></div>
                 </div>
                 {{-- END: Custom Language Switcher --}}
                 {{-- زر فتح البحث --}}
@@ -197,7 +198,7 @@
     {{-- Header --}}
     <div class="mobile-menu-header">
         <div class="mobile-menu-brand">
-            <img src="{{ Storage::url($settings['site_logo_header']) }}" alt="شعار المحافظة" class="mobile-logo">
+            <img src="{{ Storage::url($settings['site_logo_header'] ?? '') }}" alt="شعار المحافظة" class="mobile-logo">
             <span class="mobile-brand-text">محافظة كفر الشيخ</span>
         </div>
         <button class="mobile-menu-close" id="closeMobileMenu">
@@ -303,8 +304,6 @@
                 </a>
             </li>
 
-            <li class="mobile-menu-divider"></li>
-
             {{-- تواصل معنا --}}
             <li class="mobile-dropdown">
                 <a href="javascript:void(0)" class="mobile-dropdown-trigger d-flex align-items-center">
@@ -313,6 +312,7 @@
                     <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
                 <ul class="mobile-submenu">
+                    <li><a href="{{ route('directory.index') }}"><i class="fas fa-phone-alt"></i> دليل الهاتف</a></li>
                     <li><a href="{{ route('contact.index') }}"><i class="fas fa-envelope"></i> الدعم الفني </a></li>
                     <li><a href="{{ route('requests.index') }}"><i class="fas fa-file-alt"></i> تقديم شكوى أو
                             بلاغ</a></li>

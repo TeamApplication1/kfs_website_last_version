@@ -142,10 +142,16 @@ class DashboardController extends Controller
                 };
                 if ($action !== 'مكتمل' && $action !== '—') {
                     $items->push((object) [
+                        'id' => $item->id,
                         'source' => 'خدمة عامة',
+                        'type' => 'service',
                         'reference' => $item->service?->name ?? '#' . $item->id,
                         'status' => $item->status,
                         'fulfillment_action' => $action,
+                        'fulfillment_status' => $item->fulfillment_status,
+                        'fulfillment_action_type' => $item->fulfillment_action,
+                        'fulfillment_reason' => $item->fulfillment_reason,
+                        'fulfillment_data_fields' => $item->fulfillment_data_fields,
                         'created_at' => $item->created_at,
                     ]);
                 }
@@ -165,10 +171,16 @@ class DashboardController extends Controller
                 };
                 if ($action !== 'مكتمل' && $action !== '—') {
                     $items->push((object) [
+                        'id' => $item->id,
                         'source' => 'خدمات مكانية',
+                        'type' => 'gis',
                         'reference' => $item->subService?->name ?? '#' . $item->id,
                         'status' => $item->status,
                         'fulfillment_action' => $action,
+                        'fulfillment_status' => $item->fulfillment_status,
+                        'fulfillment_action_type' => $item->fulfillment_action,
+                        'fulfillment_reason' => $item->fulfillment_reason,
+                        'fulfillment_data_fields' => $item->fulfillment_data_fields,
                         'created_at' => $item->created_at,
                     ]);
                 }

@@ -79,6 +79,16 @@ class ContactMessageResource extends Resource
                     ->label('حالة الطلب')
                     ->trueLabel('تمت المعالجة')
                     ->falseLabel('بانتظار المعالجة'),
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_from')->label('من تاريخ'),
+                        Forms\Components\DatePicker::make('created_until')->label('إلى تاريخ'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

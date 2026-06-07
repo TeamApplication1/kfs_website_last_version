@@ -28,12 +28,16 @@ class GisSubmission extends Model
         'urban_planning',
         'borders',
         'web_map_url',
-        'serial_number'
+        'serial_number',
+        'fulfillment_status',
+        'fulfillment_action',
+        'fulfillment_reason',
+        'fulfillment_data_fields',
+        'fulfillment_requested_by',
+        'fulfillment_requested_at',
+        'fulfillment_completed_at',
     ];
 
-    /**
-     * تأكد من تحويل كل حقول الـ JSON لمصفوفات لاسترجاع البيانات بسهولة في الفيو
-     */
     protected $casts = [
         'applicant_info' => 'array',
         'address_info' => 'array',
@@ -43,6 +47,9 @@ class GisSubmission extends Model
         'urban_planning' => 'array',
         'borders' => 'array',
         'inspection_date' => 'datetime',
+        'fulfillment_data_fields' => 'array',
+        'fulfillment_requested_at' => 'datetime',
+        'fulfillment_completed_at' => 'datetime',
     ];
 
     /**

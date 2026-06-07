@@ -11,6 +11,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SuggestionResource extends Resource
 {
@@ -91,6 +92,16 @@ class SuggestionResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options(['new' => 'جديد', 'under_review' => 'قيد المراجعة', 'implemented' => 'تم التنفيذ']),
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_from')->label('من تاريخ'),
+                        Forms\Components\DatePicker::make('created_until')->label('إلى تاريخ'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when($data['created_from'], fn($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
